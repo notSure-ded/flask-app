@@ -24,9 +24,7 @@ pipeline {
 
         stage('ACR Login') {
             steps {
-                sh '''
-                az acr login --name dudacr2026xyz
-                '''
+                sh 'az acr login --name dudacr2026xyz'
             }
         }
 
@@ -39,7 +37,7 @@ pipeline {
         stage('Clone GitOps Repo') {
             steps {
                 sh '''
-                git clone https://github.com/YOUR_USERNAME/dud-gitops.git
+                git clone https://github.com/notSure-ded/gitOps.git
                 '''
             }
         }
@@ -47,25 +45,32 @@ pipeline {
         stage('Update Deployment File') {
             steps {
                 sh '''
-                sed -i "s|image:.*|image: $REGISTRY/$IMAGE:$TAG|g" dud-gitops/flask-app/deployment.yaml
+                sed -i "s|image:.*|image: $REGISTRY/$IMAGE:$TAG|g" gitOps/deployment.yaml
                 '''
             }
         }
 
-stage('Push Updated Manifest') {
-    steps {
-        sh '''
-        cd ../k8s
+        stage('Push Updated Manifest') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'github-creds',
+                    usernameVariable: 'GIT_USER',
+                    passwordVariable: 'GIT_PASS'
+                )]) {
 
-        git config user.email "jenkins@example.com"
-        git config user.name "jenkins"
+                    sh '''
+                    cd gitOps
 
-        git add .
-        git commit -m "Updated image to $TAG" || echo "No changes to commit"
+                    git config user.email "jenkins@example.com"
+                    git config user.name "jenkins"
 
-        git push origin main
-        '''
-    }
-}
+                    git add .
+                    git commit -m "Updated image to $TAG" || echo "No changes"
+
+                    git push https://$GIT_USER:$GIT_PASS@github.com/notSure-ded/gitOps.git HEAD:main
+                    '''
+                }
+            }
+        }
     }
 }
