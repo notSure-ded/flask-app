@@ -12,7 +12,7 @@ pipeline {
         stage('Clone App Repo') {
             steps {
                 git branch: 'main',
-                url: 'https://github.com/YOUR_USERNAME/dud-flask-app.git'
+                url: 'https://github.com/notSure-ded/flask-app.git'
             }
         }
 
@@ -52,20 +52,20 @@ pipeline {
             }
         }
 
-        stage('Push Updated Manifest') {
-            steps {
-                sh '''
-                cd dud-gitops
+stage('Push Updated Manifest') {
+    steps {
+        sh '''
+        cd ../k8s
 
-                git config user.email "jenkins@example.com"
-                git config user.name "jenkins"
+        git config user.email "jenkins@example.com"
+        git config user.name "jenkins"
 
-                git add .
-                git commit -m "Updated image to $TAG"
+        git add .
+        git commit -m "Updated image to $TAG" || echo "No changes to commit"
 
-                git push
-                '''
-            }
-        }
+        git push origin main
+        '''
+    }
+}
     }
 }
