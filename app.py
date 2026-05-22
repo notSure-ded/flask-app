@@ -11,7 +11,7 @@ def hello():
     return "pipeline works"
 
 @app.route("/hell")
-def hello():
+def hell():
     return "devOps is hell"
 
 if __name__ == "__main__":
