@@ -14,5 +14,10 @@ def hello():
 def hell():
     return "devOps is hell"
 
+app.route("/new-path")
+def new_path():
+    return "This is a new path added to the Flask app"
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
