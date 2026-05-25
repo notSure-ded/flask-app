@@ -16,7 +16,7 @@ def hell():
 
 app.route("/new-path")
 def new_path():
-    return "This is a new path added to the  Flask app"
+    return "This is a new pat h added to the  Flask app"
 
 
 if __name__ == "__main__":
