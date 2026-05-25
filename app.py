@@ -12,7 +12,7 @@ def hello():
 
 @app.route("/hell")
 def hell():
-    return "devOps is hell"
+    return "devops test"
 
 app.route("/new-path")
 def new_path():
